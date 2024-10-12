@@ -1,8 +1,8 @@
 {
 	"$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
-	"productName": "Queen's game",
+	"productName": "queens-game",
 	"version": "0.1.0",
-	"identifier": "com.tauri.dev",
+	"identifier": "com.example.tauri",
 	"build": {
 		"frontendDist": "../build",
 		"devUrl": "http://localhost:5173",
@@ -12,9 +12,8 @@
 	"app": {
 		"windows": [
 			{
-				"title": "Queen's game",
-				"maximized": true,
-				"fullscreen": false
+				"title": "queens-game",
+				"fullscreen": true
 			}
 		],
 		"security": {
