@@ -1,8 +1,9 @@
 <script>
     import * as LucideIcons from 'lucide-svelte';
-    import { theme } from '$app/stores.js';
+    // import { theme } from '$lib/stores.js';
 
     export let selected = 0;
+    export let colors;
     function selectIcon(index) {
         selected = index;
     }
@@ -23,7 +24,7 @@
 
     <div class="relative flex h-full w-full items-center justify-between px-2">
         {#each options as option, i}
-            <button on:click={() => selectIcon(i)} class="transform transition-all duration-300 cursor-pointer hover:scale-110 {selected === i ? 'scale-110 text-black' : 'scale-90 text-gray-600'}">
+            <button on:click={() => selectIcon(i)} class="transform transition-all duration-300 cursor-pointer hover:scale-110 {colors && selected === i ? colors[i] : ''} {selected === i ? 'scale-110 text-black' : 'scale-90 text-gray-600'}">
                 <svelte:component this={option.icon} size={16}/>
             </button>
         {/each}

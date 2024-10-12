@@ -7,7 +7,13 @@ const colors = [
     'bg-pink-300', 
     'bg-orange-300', 
     'bg-gray-300',
-];
+    'bg-teal-300',
+    'bg-cyan-300',
+    'bg-sky-300',
+    'bg-indigo-300',
+    'bg-violet-300',
+    'bg-fuchsia-300',
+]
 
 export class Board {
     constructor(n) {
@@ -137,6 +143,35 @@ export class Board {
         this.cells.flat().forEach(cell => {
             if (cell.state === 'queen')
                 this.cells[cell.i][cell.j].state = 'empty';
+        });
+    }
+
+    checkWin() {
+        let queens = this.cells.flat().filter(c => c.state === 'queen');
+        if (queens.length !== this.n)
+            return false;
+
+        for (let i = 0; i < this.n; i++) {
+            if (this.cells[i].filter(c => c.state === 'queen').length != 1)
+                return false;
+        }
+
+        for (let j = 0; j < this.n; j++) {
+            if (this.cells.filter(r => r[j].state === 'queen').length != 1)
+                return false;
+        }
+
+        for (let queen of queens)
+            for (let other of queens.filter(q => q !== queen))
+                if (Math.abs(queen.i - other.i) <= 1 && Math.abs(queen.j - other.j) <= 1)
+                    return false;
+
+        return true;
+    }
+
+    reset() {
+        this.cells.flat().forEach(cell => {
+            cell.state = 'empty';
         });
     }
 }
