@@ -13,7 +13,7 @@
 		"windows": [
 			{
 				"title": "queens-game",
-				"fullscreen": true
+				"maximized": true
 			}
 		],
 		"security": {

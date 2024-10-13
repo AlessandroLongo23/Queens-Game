@@ -1,10 +1,8 @@
 node_modules
 
 # Output
-.output
-.vercel
 /.svelte-kit
-/build
+src-tauri/target
 
 # OS
 .DS_Store
@@ -19,3 +17,6 @@ Thumbs.db
 # Vite
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# Sounds
+static/sounds/Audio

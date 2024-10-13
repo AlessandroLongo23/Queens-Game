@@ -151,20 +151,8 @@ export class Board {
         if (queens.length !== this.n)
             return false;
 
-        for (let i = 0; i < this.n; i++) {
-            if (this.cells[i].filter(c => c.state === 'queen').length != 1)
-                return false;
-        }
-
-        for (let j = 0; j < this.n; j++) {
-            if (this.cells.filter(r => r[j].state === 'queen').length != 1)
-                return false;
-        }
-
-        for (let queen of queens)
-            for (let other of queens.filter(q => q !== queen))
-                if (Math.abs(queen.i - other.i) <= 1 && Math.abs(queen.j - other.j) <= 1)
-                    return false;
+        if (this.checkError())
+            return false;
 
         return true;
     }
@@ -172,7 +160,39 @@ export class Board {
     reset() {
         this.cells.flat().forEach(cell => {
             cell.state = 'empty';
+            cell.error = false;
         });
+    }
+
+    checkError() {
+        let queens = this.cells.flat().filter(c => c.state === 'queen');
+
+        this.cells.flat().forEach(cell => {
+            cell.error = false;
+        });
+
+        for (let i = 0; i < this.n; i++)
+            if (this.cells[i].filter(c => c.state === 'queen').length > 1)
+                this.cells[i].forEach(c => c.error = true);
+
+        for (let j = 0; j < this.n; j++)
+            if (this.cells.filter(r => r[j].state === 'queen').length > 1)
+                this.cells.forEach(r => r[j].error = true);
+
+        for (let i = 0; i < queens.length; i++) {
+            for (let j = i + 1; j < queens.length; j++) {
+                if (Math.abs(queens[i].i - queens[j].i) <= 1 && Math.abs(queens[i].j - queens[j].j) <= 1) {
+                    this.cells[queens[i].i][queens[i].j].error = true;
+                    this.cells[queens[j].i][queens[j].j].error = true;
+                }
+
+                if (this.cells[queens[i].i][queens[i].j].color == this.cells[queens[j].i][queens[j].j].color)
+                    for (let cell of this.cells.flat().filter(c => c.color == this.cells[queens[i].i][queens[i].j].color))
+                        this.cells[cell.i][cell.j].error = true;        
+            }   
+        }
+
+        return this.cells.flat().some(c => c.error);
     }
 }
 
