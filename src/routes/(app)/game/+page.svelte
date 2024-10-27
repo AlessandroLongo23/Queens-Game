@@ -1,6 +1,4 @@
 <script>
-    // import { preventDefault } from 'svelte/legacy';
-
     import { onMount, onDestroy } from 'svelte';
     import * as ls from 'lucide-svelte';
     import { Board } from '$lib/Board.svelte.js';
@@ -11,7 +9,7 @@
     // import DialogBox from '$lib/components/DialogBox.svelte';
     // TODO replace with dialog boxex
 
-    import { theme, sound, info } from '$lib/stores.js';
+    import { theme, sound, info } from '$lib/stores.svelte.js';
 
     let board = $state(), seconds = $state(), win = $state(), n = $state(), cellSize = $state();
     let placeQueenSound, removeQueenSound, crossSound, winSound = $state();
@@ -246,7 +244,7 @@
                                 {@const topBorder = j === 0 || board.cells[i][j - 1].color != board.cells[i][j].color ? 'border-t-2' : 'border-t border-t-black/25'}
                                 {@const bottomBorder = j === board.cells[0].length - 1 || board.cells[i][j + 1].color != board.cells[i][j].color ? 'border-b-2' : 'border-b border-b-black/25'}
                                 <button 
-                                    class="{cellSize} {cell.color} {leftBorder} {rightBorder} {topBorder} {bottomBorder} border-black m-auto"
+                                    class="relative {cellSize} {cell.color} {leftBorder} {rightBorder} {topBorder} {bottomBorder} border-black m-auto"
                                     onmousedown={(event) => handleMouseDown(event, i, j)}
                                     onmouseenter={() => handleMouseEnter(i, j)}
                                 >
@@ -257,7 +255,7 @@
                                     {#if cell.state === 'queen'}
                                         <img class="absolute z-50 -translate-y-1/2 {n == 5 || n == 6 ? 'size-20' : n == 7 ? 'size-16' : 'size-12'} p-1" src="/pieces/wQ.svg" alt="white queen"/>
                                     {:else if cell.state === 'cross'}
-                                        <div class="pointer-events-none">
+                                        <div class="absolute z-50 -translate-y-1/2 pointer-events-none">
                                             <ls.X size="50%" strokeWidth="1" class="m-auto"/>
                                         </div>
                                     {/if}

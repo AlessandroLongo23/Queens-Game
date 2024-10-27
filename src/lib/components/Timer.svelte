@@ -1,5 +1,5 @@
 <script>
-    import { theme } from '$lib/stores.js';
+    import { theme } from '$lib/stores.svelte.js';
 
     let { seconds = $bindable(0) } = $props();
 

@@ -169,29 +169,16 @@ export class Board {
         let queens = this.cells.flat().filter(c => c.state === 'queen');
 
         this.cells.flat().forEach(cell => {
-            cell.error = false;
+            let numQueensSameRow = this.cells.flat().filter(c => c.i === cell.i && c.state === 'queen').length;
+            let numQueensSameColumn = this.cells.flat().filter(c => c.j === cell.j && c.state === 'queen').length;
+            let numQueensSameColour = this.cells.flat().filter(c => c.color === cell.color && c.state === 'queen').length;
+            let isQueenInNeighbour = this.cells.flat().some(c => Math.abs(c.i - cell.i) + Math.abs(c.j - cell.j) <= 2 && c !== cell && cell.state === 'queen' && c.state === 'queen');
+
+            if ((numQueensSameRow > 1 || numQueensSameColumn > 1 || numQueensSameColour > 1 || isQueenInNeighbour) && !cell.error)
+                cell.error = true;
+            else if (numQueensSameRow <= 1 && numQueensSameColumn <= 1 && numQueensSameColour <= 1 && !isQueenInNeighbour && cell.error)
+                cell.error = false;
         });
-
-        for (let i = 0; i < this.n; i++)
-            if (this.cells[i].filter(c => c.state === 'queen').length > 1)
-                this.cells[i].forEach(c => c.error = true);
-
-        for (let j = 0; j < this.n; j++)
-            if (this.cells.filter(r => r[j].state === 'queen').length > 1)
-                this.cells.forEach(r => r[j].error = true);
-
-        for (let i = 0; i < queens.length; i++) {
-            for (let j = i + 1; j < queens.length; j++) {
-                if (Math.abs(queens[i].i - queens[j].i) <= 1 && Math.abs(queens[i].j - queens[j].j) <= 1) {
-                    this.cells[queens[i].i][queens[i].j].error = true;
-                    this.cells[queens[j].i][queens[j].j].error = true;
-                }
-
-                if (this.cells[queens[i].i][queens[i].j].color == this.cells[queens[j].i][queens[j].j].color)
-                    for (let cell of this.cells.flat().filter(c => c.color == this.cells[queens[i].i][queens[i].j].color))
-                        this.cells[cell.i][cell.j].error = true;        
-            }   
-        }
 
         return this.cells.flat().some(c => c.error);
     }
@@ -199,9 +186,11 @@ export class Board {
 
 class Cell {
     state = $state();
+    error = $state();
     
     constructor(state, i, j) {
         this.state = state;
+        this.error = false;
         this.i = i;
         this.j = j;
         this.color = '';

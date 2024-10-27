@@ -1,5 +1,5 @@
 <script>
-    import { theme } from "$lib/stores";
+    import { theme } from "$lib/stores.svelte.js";
     import * as ls from 'lucide-svelte';
 
     let closeWindowMessage = $state(false);

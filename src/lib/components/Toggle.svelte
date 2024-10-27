@@ -1,6 +1,7 @@
 <script>
     import * as LucideIcons from 'lucide-svelte';
     import { onMount } from 'svelte';
+    import { sound } from '$lib/stores.svelte.js';
 
     let themeSound;
     onMount(() => {
@@ -11,12 +12,11 @@
         if (index != selected) {
             selected = index;
             themeSound.currentTime = 0;
-            themeSound.play();
+            $sound && themeSound.play();
         }
     }
 
     let off = 2.25;
-    /** @type {{selected?: number, colors: any, icons: any}} */
     let { selected = $bindable(0), colors, icons } = $props();
 
     let options = [];

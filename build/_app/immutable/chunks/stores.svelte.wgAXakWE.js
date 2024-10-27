@@ -1,0 +1,1 @@
+import{L as l}from"./runtime.CGsJHgnc.js";import{w as e}from"./index.D_GiXkLK.js";function _(s,t){var c=s.__className,a=n(t);l&&s.className===a?s.__className=a:(c!==a||l&&s.className!==a)&&(t==null?s.removeAttribute("class"):s.className=a,s.__className=a)}function n(s){return s??""}const f=e(0),m=e(!0),o=e(!1);export{m as a,o as i,_ as s,f as t};

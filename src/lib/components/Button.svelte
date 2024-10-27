@@ -1,5 +1,5 @@
 <script>
-    import { theme } from "$lib/stores";
+    import { theme } from "$lib/stores.svelte.js";
 
     let {
         text = '',
@@ -7,6 +7,7 @@
         func = () => {},
         icon = '',
         iconSize = '',
+        downloadHref = '',
         disabled = false
     } = $props();
 
@@ -28,10 +29,16 @@
 </script>
 
 <button onclick={func} class="flex flex-row justify-center items-center gap-2 py-1 transition-colors rounded-lg shadow-sm border-2 { icon ? 'ps-3 pe-4' : 'px-4'} { disabled && 'opacity-50 cursor-not-allowed' } { $theme == 0 ? lightTheme : darkTheme }">
-    {#if icon}
+    {#if typeof(icon) === 'string' && icon.startsWith('fa-')}
+        <i class="fa fa-windows text-xl p-1"></i>
+    {:else}
         {@const SvelteComponent = icon}
         <SvelteComponent size={iconSize} class="p-1 m-auto"/>
     {/if}
 
-    { text }
+    {#if downloadHref}
+        <a class="{$theme == 0 ? 'text-black' : 'text-white'} hover:no-underline" href={downloadHref}>{ text }</a>
+    {:else}
+        { text }
+    {/if}
 </button>
