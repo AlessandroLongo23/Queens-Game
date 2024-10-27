@@ -16,9 +16,10 @@ const colors = [
 ]
 
 export class Board {
+    cells = $state([]);
+
     constructor(n) {
         this.n = n;
-        this.cells = [];
         for (let i = 0; i < n; i++) {
             this.cells[i] = [];
             for (let j = 0; j < n; j++)
@@ -197,6 +198,8 @@ export class Board {
 }
 
 class Cell {
+    state = $state();
+    
     constructor(state, i, j) {
         this.state = state;
         this.i = i;

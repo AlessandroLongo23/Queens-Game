@@ -2,7 +2,7 @@
     import { theme } from "$lib/stores";
     import * as ls from 'lucide-svelte';
 
-    let closeWindowMessage = false;
+    let closeWindowMessage = $state(false);
     function toggleCloseWindowMessage() {
         if (!info)
             closeWindowMessage = !closeWindowMessage;
@@ -21,8 +21,8 @@
             </p>
             
             <div class="flex flex-row justify-center items-center gap-4">
-                <button on:click={toggleCloseWindowMessage} class="text-black bg-neutral-200 hover:bg-neutral-300 rounded-lg px-4 py-2">Cancel</button>
-                <button on:click={closeCurrentWindow} class="text-black bg-red-400 hover:bg-red-500 rounded-lg px-4 py-2">Exit</button>
+                <button onclick={toggleCloseWindowMessage} class="text-black bg-neutral-200 hover:bg-neutral-300 rounded-lg px-4 py-2">Cancel</button>
+                <button onclick={closeCurrentWindow} class="text-black bg-red-400 hover:bg-red-500 rounded-lg px-4 py-2">Exit</button>
             </div>
         </div>
     </div>

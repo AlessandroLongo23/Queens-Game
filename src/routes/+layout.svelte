@@ -7,24 +7,28 @@
     import Button from '$lib/components/Button.svelte';
     import Checkbox from '$lib/components/Checkbox.svelte';
     import { onMount } from "svelte";
+    /** @type {{children?: import('svelte').Snippet}} */
+    let { children } = $props();
 
-    let audioSound, buttonSound;
+    let audioSound = $state(), buttonSound;
     onMount(() => {
         audioSound = new Audio('/sounds/audio.ogg');
         buttonSound = new Audio('/sounds/button.ogg');
     });
 
-    $: if (audioSound) {
-        if ($sound) {
-            audioSound.currentTime = 0;
-            audioSound.play();
-        } else {
-            audioSound.pause();
-            audioSound.currentTime = 0;
+    $effect(() => {
+        if (audioSound) {
+            if ($sound) {
+                audioSound.currentTime = 0;
+                audioSound.play();
+            } else {
+                audioSound.pause();
+                audioSound.currentTime = 0;
+            }
         }
-    }
+    });
 
-    let closeWindowMessage = false;
+    let closeWindowMessage = $state(false);
     function toggleCloseWindowMessage() {
         if (!$info) {
             closeWindowMessage = !closeWindowMessage;
@@ -61,7 +65,7 @@
     <Toggle icons={[ls.Sun, ls.Moon]} colors={['text-yellow-400', 'text-blue-900']} bind:selected={$theme}/>
     <Button text="Exit" color="red" icon={ls.LogOut} iconSize={32} func={() => toggleCloseWindowMessage()}/>
 </div>
-<slot />
+{@render children?.()}
 
 <style>
     :global(*) {

@@ -1,9 +1,9 @@
 <script>
     import { theme } from '$lib/stores.js';
 
-    export let seconds = 0;
+    let { seconds = $bindable(0) } = $props();
 
-    let ss, mm, timeString;
+    let ss, mm, timeString = $state();
     updateTime();
 
     function updateTime() {
@@ -12,7 +12,9 @@
         timeString = `${mm}:${ss < 10 ? '0' : ''}${ss}`;
     }
 
-    $: seconds && updateTime();
+    $effect(() => {
+        updateTime();
+    });
 </script>
 
 <div class="flex flex-col justify-center items-center">

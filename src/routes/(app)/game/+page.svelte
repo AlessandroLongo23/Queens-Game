@@ -1,7 +1,9 @@
 <script>
+    // import { preventDefault } from 'svelte/legacy';
+
     import { onMount, onDestroy } from 'svelte';
     import * as ls from 'lucide-svelte';
-    import { Board } from '$lib/Board.js';
+    import { Board } from '$lib/Board.svelte.js';
 
     import Timer from '$lib/components/Timer.svelte';
     import Confetti from '$lib/components/Confetti.svelte';
@@ -11,9 +13,10 @@
 
     import { theme, sound, info } from '$lib/stores.js';
 
-    let board, seconds, win, n, cellSize;
-    let placeQueenSound, removeQueenSound, crossSound, winSound;
+    let board = $state(), seconds = $state(), win = $state(), n = $state(), cellSize = $state();
+    let placeQueenSound, removeQueenSound, crossSound, winSound = $state();
     let playSound, errorSound, resetSound, buttonSound;
+    
     onMount(() => {
         newGame();
 
@@ -66,8 +69,6 @@
             errorSound.currentTime = 0;
             $sound && errorSound.play();
         }
-
-        board = board;
     }
 
     function handleRightClick(i, j) {
@@ -81,7 +82,6 @@
             errorSound.currentTime = 0;
             $sound && errorSound.play();
         }
-        board = board;
     }
 
     function handleMouseEnter(i, j) {
@@ -98,14 +98,12 @@
         board.cells[i][j].state = 'cross';
         crossSound.currentTime = 0;
         $sound && crossSound.play();
-        board = board;
     }
 
     function removeCross(i, j) {
         board.cells[i][j].state = 'empty';
         crossSound.currentTime = 0;
         $sound && crossSound.play();
-        board = board;
     }
 
     const updateTime = () => {
@@ -118,8 +116,9 @@
         clearInterval(interval);
     });
 
-    let winPlayed = false;
-    $: setTimeout(() => {
+    let winPlayed = $state(false);
+    
+    $effect(() => {
         win = board.checkWin();
         if (win && !winPlayed) {
             winSound.currentTime = 0;
@@ -178,7 +177,7 @@
     }
 </script>
 
-<div on:mouseup={() => handleMouseUp()} on:keydown={handleKeydown} role="button" tabindex="0" class="cursor-default flex flex-col justify-between items-center w-screen h-screen m-auto transition-all duration-75 {$theme ? 'bg-neutral-900' : 'bg-white'}">
+<div onmouseup={() => handleMouseUp()} onkeydown={handleKeydown} role="button" tabindex="0" class="cursor-default flex flex-col justify-between items-center w-screen h-screen m-auto transition-all duration-75 {$theme ? 'bg-neutral-900' : 'bg-white'}">
     <div class="flex flex-row items-center gap-4">
         <h1 class="m-8 text-5xl font-semibold {$theme ? 'text-white' : 'text-black'}">Queen's Game</h1>
     </div>
@@ -192,7 +191,7 @@
         >
             <div class="flex flex-col items-center">
                 <div class="flex flex-row justify-center items-center gap-2 mb-2">
-                    <svelte:component this={ls.Info} size={36} class="p-1 m-auto"/>
+                    <ls.Info size={36} class="p-1 m-auto"/>
                     <h1 class="text-2xl font-bold my-2 text-center { $theme == 0 ? 'text-black' : 'text-white'}">
                         How to play
                     </h1>
@@ -207,7 +206,7 @@
                     Left click on a cell to place a queen
                     <img src="/pieces/wQ.svg" alt="white queen" class="size-6 inline-block m-auto"/>
                     , or right click to flag it with a cross
-                    <svelte:component this={ls.X} size={16} class="inline-block m-auto"/>.
+                    <ls.X size={16} class="inline-block m-auto"/>.
                 </p>
             </div>
             
@@ -248,8 +247,8 @@
                                 {@const bottomBorder = j === board.cells[0].length - 1 || board.cells[i][j + 1].color != board.cells[i][j].color ? 'border-b-2' : 'border-b border-b-black/25'}
                                 <button 
                                     class="{cellSize} {cell.color} {leftBorder} {rightBorder} {topBorder} {bottomBorder} border-black m-auto"
-                                    on:mousedown|preventDefault={(event) => handleMouseDown(event, i, j)}
-                                    on:mouseenter={() => handleMouseEnter(i, j)}
+                                    onmousedown={(event) => handleMouseDown(event, i, j)}
+                                    onmouseenter={() => handleMouseEnter(i, j)}
                                 >
                                     {#if cell.error}    
                                         <img src="/stripe.svg" class="absolute -translate-y-1/2 z-20 {cellSize} p-1" alt="error"/> 
@@ -259,7 +258,7 @@
                                         <img class="absolute z-50 -translate-y-1/2 {n == 5 || n == 6 ? 'size-20' : n == 7 ? 'size-16' : 'size-12'} p-1" src="/pieces/wQ.svg" alt="white queen"/>
                                     {:else if cell.state === 'cross'}
                                         <div class="pointer-events-none">
-                                            <svelte:component this={ls.X} size="50%" strokeWidth="1" class="m-auto"/>
+                                            <ls.X size="50%" strokeWidth="1" class="m-auto"/>
                                         </div>
                                     {/if}
                                 </button>
