@@ -80,7 +80,7 @@
         </p>
         
         <div class="flex flex-row justify-center items-center gap-4">
-            <Button text="Windows 64bit" icon={"fa-brands fa-windows"} iconSize={32} color="neutral" downloadHref="\bundles\queens-game_0.1.0_x64_en-US.msi"/>
+            <Button text="Windows 64bit" icon={"fa-brands fa-windows"} iconSize={32} color="neutral" downloadHref="\bundles\QueensGame_0.1.0_x64_en-US.msi"/>
         </div>
     </div>
 </div>
@@ -88,7 +88,7 @@
 <div class="absolute flex flex-row justify-end items-center gap-8 top-10 right-10">
     <Checkbox icons={[ls.Volume2, ls.VolumeX]} bind:checked={$sound}/>
     <Toggle icons={[ls.Sun, ls.Moon]} colors={['text-yellow-400', 'text-blue-900']} bind:selected={$theme}/>
-    {#if window.__TAURI__}
+    {#if window.__TAURI_INTERNALS__}
         <Button text="Exit" color="red" icon={ls.LogOut} iconSize={32} func={() => toggleCloseWindowMessage()}/>
     {:else}
         <Button text="Download" color="blue" icon={ls.Download} iconSize={32} func={() => toggleDownloadsModal()}/>
